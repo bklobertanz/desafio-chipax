@@ -1,10 +1,4 @@
-/* delete me */
-import 'dotenv/config'
+import executeExerciseOne from './exercises/exerciseOne'
+import { EXERCISE_ONE_NAME } from './common/constants'
 
-console.log('hola mundo')
-
-function sum(a: number, b: number): number {
-  return a + b
-}
-console.log(sum(1, 1))
-console.log(process.env.test)
+Promise.all([executeExerciseOne(EXERCISE_ONE_NAME)]).then((results) => console.log('hola', results))
