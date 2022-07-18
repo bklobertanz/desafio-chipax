@@ -13,15 +13,16 @@ const executeExerciseTwo = async (exerciseName: string) => {
   const characters = charResults as Character[]
   const episodes = epiResults as Episode[]
 
-  const charsMap = new Map(characters.map((character: Character) => [character.url, character]))
-
+  const charactersOriginMap = new Map(
+    characters.map((character: Character) => [character.url, character.origin.name])
+  )
   const episodesLocations = episodes.map(({ name, episode, characters: episodeCharacters }) => ({
     name,
     episode,
     locations: Array.from(
       new Set(
         episodeCharacters.map(
-          (episodeCharacter: string) => charsMap.get(episodeCharacter)!.origin.name
+          (episodeCharacter: string) => charactersOriginMap.get(episodeCharacter)!
         )
       )
     )
