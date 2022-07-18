@@ -14,7 +14,7 @@ const getEpisodeLocations = (
       )
     )
   )
-const getAllData = async () => {
+const getAllResourcesData = async () => {
   const resourcePromises = [
     getAllResources<Character>(resourceNames.character),
     getAllResources<Episode>(resourceNames.episode)
@@ -34,7 +34,7 @@ const getEpisodesLocations = (episodes: Episode[], charactersOriginMap: Map<stri
 const executeExerciseTwo = async (exerciseName: string) => {
   const initialTime = performance.now()
 
-  const [charResults, epiResults] = await getAllData()
+  const [charResults, epiResults] = await getAllResourcesData()
 
   const characters = charResults as Character[]
   const episodes = epiResults as Episode[]
