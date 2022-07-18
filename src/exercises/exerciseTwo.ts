@@ -1,29 +1,35 @@
 import { resourceNames } from '../enums/resources'
-import { Episode } from '../types/types'
+import { Character, Episode } from '../types/types'
 import { getAllResources } from '../services/resources'
-import getCharacterLocation from '../services/characters'
+import { calcPerformanceTimeInSec, generateAnswer } from '../helpers/utils'
 
-export const getEpisodeLocations = async (episode: Episode) => {
-  const { characters: charUrls } = episode
-  const promises = charUrls.map((charUrl: string) => getCharacterLocation(charUrl))
-  const episodeLocations = await Promise.all(promises)
-  return Array.from(new Set(episodeLocations))
-}
-const generateResult = (episode: Episode, locations: string[]) => {
-  const { name, episode: episodeId } = episode
-  return {
+const executeExerciseTwo = async (exerciseName: string) => {
+  const initialTime = performance.now()
+  const resourcePromises = [
+    getAllResources<Character>(resourceNames.character),
+    getAllResources<Episode>(resourceNames.episode)
+  ]
+  const [charResults, epiResults] = await Promise.all(resourcePromises)
+  const characters = charResults as Character[]
+  const episodes = epiResults as Episode[]
+
+  const charsMap = new Map(characters.map((character: Character) => [character.url, character]))
+
+  const episodesLocations = episodes.map(({ name, episode, characters: episodeCharacters }) => ({
     name,
-    episode: episodeId,
-    locations
-  }
-}
+    episode,
+    locations: Array.from(
+      new Set(
+        episodeCharacters.map(
+          (episodeCharacter: string) => charsMap.get(episodeCharacter)!.origin.name
+        )
+      )
+    )
+  }))
+  const finalTime = performance.now()
 
-const executeExerciseTwo = async () => {
-  const episodes = await getAllResources<Episode>(resourceNames.episode)
-  const episode = episodes[0]
-
-  const episodeLocations = await getEpisodeLocations(episode)
-  console.log(generateResult(episode, episodeLocations))
+  const performanceTimeInSeconds = calcPerformanceTimeInSec(initialTime, finalTime)
+  return generateAnswer(exerciseName, performanceTimeInSeconds, episodesLocations)
 }
 
 export default executeExerciseTwo
