@@ -11,7 +11,7 @@ export const isInTime = (performanceTime: number) => {
 export const generateAnswer = (
   exerciseName: string,
   time: number,
-  results: Record<string, string | number>[]
+  results: Record<string, string | number | string[]>[]
 ) => ({
   exercise_name: exerciseName,
   time,
