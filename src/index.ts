@@ -1,6 +1,10 @@
 import executeExerciseOne from './exercises/exerciseOne'
-import { EXERCISE_ONE_NAME } from './common/constants'
+import executeExerciseTwo from './exercises/exerciseTwo'
+import { EXERCISE_ONE_NAME, EXERCISE_TWO_NAME } from './common/constants'
 
-Promise.all([executeExerciseOne(EXERCISE_ONE_NAME)]).then((results) =>
+const executeChallenge = async () => {
+  const promises = [executeExerciseOne(EXERCISE_ONE_NAME), executeExerciseTwo(EXERCISE_TWO_NAME)]
+  const results = await Promise.all(promises)
   console.log(JSON.stringify(results, undefined, 2))
-)
+}
+executeChallenge().then()
