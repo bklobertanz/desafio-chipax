@@ -1,5 +1,3 @@
-import { resourceNameType } from '../types/types'
-
 export const calcPerformanceTimeInSec = (initialTime: number, finalTime: number) => {
   const ONE_SEC_IN_MS = 1000
   return (finalTime - initialTime) / ONE_SEC_IN_MS
@@ -19,9 +17,4 @@ export const generateAnswer = (
   time,
   in_time: isInTime(time),
   results
-})
-export const generateResults = (letter: string, count: number, resource: resourceNameType) => ({
-  char: letter,
-  count,
-  resource
 })

@@ -1,5 +1,5 @@
 import { resourceNames, resourceNameLetter } from '../enums/resources'
-import { calcPerformanceTimeInSec, generateAnswer, generateResults } from '../helpers/utils'
+import { calcPerformanceTimeInSec, generateAnswer } from '../helpers/utils'
 import { getAllResources } from '../services/resources'
 import { Character, Episode, Location, resourceNameType } from '../types/types'
 
@@ -15,6 +15,11 @@ const wordsCounter = (words: string[], letter: string): number => {
   }
   return wordTotal
 }
+export const generateResults = (letter: string, count: number, resource: resourceNameType) => ({
+  char: letter,
+  count,
+  resource
+})
 
 const countWordsAndGetResult = (
   resourceNames: string[],
