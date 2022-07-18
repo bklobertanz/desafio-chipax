@@ -1,7 +1,7 @@
 import api from '../api/api'
 import { resourceNames, resourceNameLetter } from '../enums/resources.enum'
 import { resourceNameType } from '../types/resources.types'
-import { word2Letters, calcPerformanceTimeInSec } from '../helpers/utils'
+import { calcPerformanceTimeInSec } from '../helpers/utils'
 
 interface RickAndMortyAPIResponse<T> {
   info: {
@@ -74,16 +74,8 @@ const getAllResources = async <ResourceType>(resourceName: resourceNameType) => 
 }
 
 const countWordByLetter = (word: string, letter: string): number => {
-  let sum = 0
-  const letters = word2Letters(word)
-  const index = letters.findIndex((letterElem: string) => letterElem.toLowerCase() === letter)
-
-  if (index === -1) return 0
-  for (let i = index; i < letters.length - 1; i += 1) {
-    if (letters[i].toLowerCase() === letter) sum += 1
-  }
-
-  return sum
+  const regExp = new RegExp(letter, 'gi')
+  return word.match(regExp)?.length || 0
 }
 const wordsCounter = (words: string[], letter: string): number => {
   let wordTotal = 0
