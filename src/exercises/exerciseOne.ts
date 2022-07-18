@@ -1,18 +1,76 @@
 import api from '../api/api'
-import deserializeNames from '../deserializer/names.deserializer'
 import { resourceNames, resourceNameLetter } from '../enums/resources.enum'
 import { resourceNameType } from '../types/resources.types'
 import { word2Letters, calcPerformanceTimeInSec } from '../helpers/utils'
 
-const getAllResourcesNames = async (resourceName: resourceNameType, numberOfRequests: number) => {
-  const results: Promise<any>[] = []
-
-  for (let i = 0; i < numberOfRequests; i += 1) {
-    const pageNumber = i + 1
-    results.push(api.fetchAll(resourceName, pageNumber))
+interface RickAndMortyAPIResponse<T> {
+  info: {
+    count: number
+    pages: number
+    next: string | null
+    prev: string | null
   }
-  const auxResults = await Promise.all(results)
-  return deserializeNames(auxResults)
+  results: T[]
+}
+
+interface Episode {
+  id: number
+  episode: string
+  name: string
+  characters: []
+  url: string
+  created: string
+}
+
+interface Character {
+  id: number
+  name: string
+  status: string
+  species: string
+  type: string
+  gender: string
+  origin: {
+    name: string
+    url: string
+  }
+  location: {
+    name: string
+    url: string
+  }
+  image: string
+  episode: string[]
+  url: string
+  created: string
+}
+
+interface Location {
+  id: number
+  name: string
+  type: string
+  dimension: string
+  residents: string[]
+  url: string
+  created: string
+}
+const getResourceInfo = async <T>(
+  resourceName: resourceNameType
+): Promise<RickAndMortyAPIResponse<T>> => api.fetchAll(resourceName)
+
+const getAllResources = async <ResourceType>(resourceName: resourceNameType) => {
+  const { info, results } = await getResourceInfo<ResourceType>(resourceName)
+  const { pages: totalPages } = info
+  const firstPageResults = [...results]
+  const promises: Promise<RickAndMortyAPIResponse<ResourceType>>[] = []
+  const initialPage = 2
+
+  for (let pageNumber = initialPage; pageNumber <= totalPages; pageNumber += 1) {
+    promises.push(api.fetchAll(resourceName, pageNumber))
+  }
+  const responses = await Promise.all(promises)
+  const otherResults = responses
+    .map((response: RickAndMortyAPIResponse<ResourceType>) => response.results)
+    .flat()
+  return firstPageResults.concat(otherResults)
 }
 
 const countWordByLetter = (word: string, letter: string): number => {
@@ -64,25 +122,32 @@ const countWordsAndGetResult = (
 }
 const executeExerciseOne = async (exerciseName: string) => {
   const initialTime = performance.now()
-  const resourcesNames = [
-    getAllResourcesNames(resourceNames.character, 42),
-    getAllResourcesNames(resourceNames.episode, 3),
-    getAllResourcesNames(resourceNames.location, 7)
+  const resourcePromises = [
+    getAllResources<Character>(resourceNames.character),
+    getAllResources<Episode>(resourceNames.episode),
+    getAllResources<Location>(resourceNames.location)
   ]
+  const [charResults, epiResults, locResults] = await Promise.all(resourcePromises)
+  const characters = charResults as Character[]
+  const episodes = epiResults as Episode[]
+  const locations = locResults as Location[]
 
-  const [characterNames, episodeNames, locationNames] = await Promise.all(resourcesNames)
+  const charactersNames = characters.map((character: Character) => character.name)
+  const episodesNames = episodes.map((episode: Episode) => episode.name)
+  const locationsNames = locations.map((location: Location) => location.name)
+
   const characterResults = countWordsAndGetResult(
-    characterNames,
+    charactersNames,
     resourceNames.character,
     resourceNameLetter[resourceNames.character]
   )
   const locationResults = countWordsAndGetResult(
-    locationNames,
+    locationsNames,
     resourceNames.location,
     resourceNameLetter[resourceNames.location]
   )
   const episodeResults = countWordsAndGetResult(
-    episodeNames,
+    episodesNames,
     resourceNames.episode,
     resourceNameLetter[resourceNames.episode]
   )
