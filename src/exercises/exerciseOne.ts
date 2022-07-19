@@ -23,17 +23,17 @@ const getAllResourcesNames = (
   return [charactersNames, episodesNames, locationsNames]
 }
 
-const countWordByLetter = (word: string, letter: string): number => {
+export const countWordByLetter = (word: string, letter: string): number => {
   const regExp = new RegExp(letter, 'gi')
   return Number(word.match(regExp)?.length) || 0
 }
 
-const wordsCounter = (words: string[], letter: string): number =>
+export const wordsCounter = (words: string[], letter: string): number =>
   words
     .map((word: string) => countWordByLetter(word, letter))
     .reduce((a: number, b: number) => a + b)
 
-export const generateResults = (letter: string, count: number, resource: resourceNameType) => ({
+const generateResults = (letter: string, count: number, resource: resourceNameType) => ({
   char: letter,
   count,
   resource
@@ -69,7 +69,7 @@ const countResourcesNamesAndResult = (
   return [characterResults, locationResults, episodeResults]
 }
 
-const executeExerciseOne = async (exerciseName: string) => {
+export const executeExerciseOne = async (exerciseName: string) => {
   const initialTime = performance.now()
 
   const [charResults, epiResults, locResults] = await getAllResourcesData()
@@ -100,5 +100,3 @@ const executeExerciseOne = async (exerciseName: string) => {
     episodeResults
   ])
 }
-
-export default executeExerciseOne
