@@ -28,13 +28,11 @@ const countWordByLetter = (word: string, letter: string): number => {
   return Number(word.match(regExp)?.length) || 0
 }
 
-const wordsCounter = (words: string[], letter: string): number => {
-  let wordTotal = 0
-  for (let i = 0; i < words.length - 1; i += 1) {
-    wordTotal += countWordByLetter(words[i], letter)
-  }
-  return wordTotal
-}
+const wordsCounter = (words: string[], letter: string): number =>
+  words
+    .map((word: string) => countWordByLetter(word, letter))
+    .reduce((a: number, b: number) => a + b)
+
 export const generateResults = (letter: string, count: number, resource: resourceNameType) => ({
   char: letter,
   count,
