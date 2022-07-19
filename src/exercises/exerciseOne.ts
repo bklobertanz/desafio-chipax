@@ -11,6 +11,7 @@ const getAllResourcesData = () => {
   ]
   return Promise.all(resourcePromises)
 }
+
 const getAllResourcesNames = (
   characters: Character[],
   episodes: Episode[],
@@ -24,7 +25,7 @@ const getAllResourcesNames = (
 
 const countWordByLetter = (word: string, letter: string): number => {
   const regExp = new RegExp(letter, 'gi')
-  return word.match(regExp)?.length || 0
+  return Number(word.match(regExp)?.length) || 0
 }
 
 const wordsCounter = (words: string[], letter: string): number => {
@@ -79,7 +80,7 @@ const executeExerciseOne = async (exerciseName: string) => {
   const episodes = epiResults as Episode[]
   const locations = locResults as Location[]
 
-  const [charactersNames, locationsNames, episodesNames] = getAllResourcesNames(
+  const [charactersNames, episodesNames, locationsNames] = getAllResourcesNames(
     characters,
     episodes,
     locations
