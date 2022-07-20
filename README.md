@@ -28,8 +28,10 @@
 
 [Back to the Top](#table-of-contents)
 
-### TO-DO / Future work
+### TO-DO / Technical debt
 
+- Add more unit/integration tests to comply with a 100% code coverage.
+- Add redis as a local cache/db to improve system performance. 
 
 [Back to the Top](#table-of-contents)
 
@@ -48,7 +50,7 @@ $ yarn
 
 ### Requirements and considerations
 
-> If needed, add a .env file at the root of the folder structure.
+> None so far.
 
 [Back to the Top](#table-of-contents)
 
@@ -80,6 +82,5 @@ $ yarn test:watch
 
 ## License
 
-> To be determined...
 
 [Back to the Top](#table-of-contents)
