@@ -46,9 +46,15 @@ $ yarn
 
 ```
 
+### Starting up
+
+```
+$ yarn start
+
+```
+
 ### Requirements and considerations
 
-> If needed, add a .env file at the root of the folder structure.
 
 [Back to the Top](#table-of-contents)
 
