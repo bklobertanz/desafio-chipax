@@ -11,12 +11,4 @@ const fetchAll = async <T>(resource: string, pageNumber?: number) => {
   const data = await result.json()
   return <T>data
 }
-const fetchOne = async <T>(url: string) => {
-  const result = await fetch(url)
-  if (result.status !== StatusCodes.OK) {
-    console.log(`${result.status}: ${result.statusText}`)
-  }
-  const data = await result.json()
-  return <T>data
-}
-export default { fetchAll, fetchOne }
+export default { fetchAll }
