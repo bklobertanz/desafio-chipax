@@ -1,4 +1,4 @@
-import executeExerciseOne from './exercises/exerciseOne'
+import { executeExerciseOne } from './exercises/exerciseOne'
 import executeExerciseTwo from './exercises/exerciseTwo'
 import { EXERCISE_ONE_NAME, EXERCISE_TWO_NAME } from './common/constants'
 
