@@ -3,7 +3,7 @@ import { calcPerformanceTimeInSec, generateAnswer } from '../helpers/utils'
 import { getAllResources } from '../services/resources'
 import { Character, Episode, Location, resourceNameType } from '../types/types'
 
-const getAllResourcesData = () => {
+const getAllResourcesData = (): Promise<(Character[] | Episode[] | Location[])[]> => {
   const resourcePromises = [
     getAllResources<Character>(resourceNames.character),
     getAllResources<Episode>(resourceNames.episode),
@@ -16,7 +16,7 @@ const getAllResourcesNames = (
   characters: Character[],
   episodes: Episode[],
   locations: Location[]
-) => {
+): string[][] => {
   const charactersNames = characters.map((character: Character) => character.name)
   const episodesNames = episodes.map((episode: Episode) => episode.name)
   const locationsNames = locations.map((location: Location) => location.name)
@@ -33,7 +33,11 @@ export const wordsCounter = (words: string[], letter: string): number =>
     .map((word: string) => countWordByLetter(word, letter))
     .reduce((a: number, b: number) => a + b)
 
-const generateResults = (letter: string, count: number, resource: resourceNameType) => ({
+const generateResults = (
+  letter: string,
+  count: number,
+  resource: resourceNameType
+): Record<string, string | number> => ({
   char: letter,
   count,
   resource
@@ -42,7 +46,7 @@ const countWordsAndGetResult = (
   resourceNames: string[],
   resourceName: resourceNameType,
   resourceLetter: string
-) => {
+): Record<string, string | number> => {
   const totalLetters = wordsCounter(resourceNames, resourceLetter)
   return generateResults(resourceLetter, totalLetters, resourceName)
 }
@@ -50,7 +54,7 @@ const countResourcesNamesAndResult = (
   charactersNames: string[],
   locationsNames: string[],
   episodesNames: string[]
-) => {
+): Record<string, string | number>[] => {
   const characterResults = countWordsAndGetResult(
     charactersNames,
     resourceNames.character,
@@ -69,7 +73,9 @@ const countResourcesNamesAndResult = (
   return [characterResults, locationResults, episodeResults]
 }
 
-export const executeExerciseOne = async (exerciseName: string) => {
+export const executeExerciseOne = async (
+  exerciseName: string
+): Promise<Record<string, string | boolean | Record<string, string | number | string[]>[]>> => {
   const initialTime = performance.now()
 
   const [charResults, epiResults, locResults] = await getAllResourcesData()

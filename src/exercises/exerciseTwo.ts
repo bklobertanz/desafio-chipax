@@ -14,24 +14,29 @@ const getEpisodeLocations = (
       )
     )
   )
-const getAllResourcesData = async () => {
+const getAllResourcesData = async (): Promise<(Character[] | Episode[])[]> => {
   const resourcePromises = [
     getAllResources<Character>(resourceNames.character),
     getAllResources<Episode>(resourceNames.episode)
   ]
   return Promise.all(resourcePromises)
 }
-const generateHelper = (characters: Character[]) =>
+const generateHelper = (characters: Character[]): Map<string, string> =>
   new Map(characters.map((character: Character) => [character.url, character.origin.name]))
 
-const getEpisodesLocations = (episodes: Episode[], charactersOriginMap: Map<string, string>) =>
+const getEpisodesLocations = (
+  episodes: Episode[],
+  charactersOriginMap: Map<string, string>
+): Record<string, string | string[]>[] =>
   episodes.map(({ name, episode, characters: episodeCharacters }) => ({
     name,
     episode,
     locations: getEpisodeLocations(episodeCharacters, charactersOriginMap)
   }))
 
-const executeExerciseTwo = async (exerciseName: string) => {
+const executeExerciseTwo = async (
+  exerciseName: string
+): Promise<Record<string, string | boolean | Record<string, string | number | string[]>[]>> => {
   const initialTime = performance.now()
 
   const [charResults, epiResults] = await getAllResourcesData()
