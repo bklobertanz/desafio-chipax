@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
+import fetch from 'node-fetch'
 
 const BASE_URL = 'https://rickandmortyapi.com/api'
 

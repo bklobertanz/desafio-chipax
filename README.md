@@ -55,6 +55,7 @@ $ yarn start
 
 ### Requirements and considerations
 
+> Install node-fetch v2
 
 [Back to the Top](#table-of-contents)
 
